@@ -460,12 +460,43 @@ def check_pending_tat():
                 for next_status_field, next_pending_field in next_level:
                     updates.append({"name": record.name, "field": next_status_field, "value": "Pending"})
                     updates.append({"name": record.name, "field": next_pending_field, "value": now_time})
+                    sendmail()
 
     # Apply updates to the database
     for update in updates:
         frappe.db.set_value("My Audits", update["name"], update["field"], update["value"], update_modified=False)
 
     frappe.db.commit()
+
+
+from frappe import _
+@frappe.whitelist()
+def sendmail():
+    recipients = [
+        'talib.s@sahayogmultistate.com',
+        'arshad.q@sahayogmultistate.com'
+    ]
+
+    reminder_text = "Don't forget to wish your colleagues!"
+    message = "Here is the list of birthdays for today."
+
+    birthday_persons = [
+        {"name": "John Doe", "image": "/files/john.jpg"},
+        {"name": "Jane Smith", "image": "/files/jane.jpg"}
+    ]
+
+    frappe.sendmail(
+        recipients=recipients,
+        subject="Test",  # ✅ Subject me "Test" likha hai
+        template='birthday_reminder',
+        args={
+            'reminder_text': reminder_text,
+            'birthday_persons': birthday_persons,
+            'message': message
+        },
+        header="Birthday Reminder 🎂"
+    )
+
 
 #this was for testing
 @frappe.whitelist()
