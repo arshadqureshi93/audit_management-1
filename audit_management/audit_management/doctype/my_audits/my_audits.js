@@ -236,6 +236,7 @@ frappe.ui.form.on("My Audits", {
     //   return;
     // }
 
+    // Check if audit_query_subject_box is not empty before saving
     if (!frm.doc.audit_query_subject_box) {
       frappe.msgprint(
         "<b>Before saving, First input your Query subject in the Query Subject Box.</b>"
@@ -1864,4 +1865,31 @@ frappe.ui.form.on("My Audits", {
       });
     };
   },
+ 
+    emp_branch: function(frm) {
+    //Jab branch change ho, parent_query will be reset
+    frm.set_value("parent_query", "");
+
+    //Here we define a function to apply the filter
+    function apply_parent_query_filter(frm) {
+        frm.set_query("parent_query", () => ({
+            //If emp_branch select hai --> then that particular branch's queries will be shown
+            filters: frm.doc.emp_branch
+                ? { emp_branch: frm.doc.emp_branch }
+                //If emp_branch blank hai --> then do not show any queries
+                : { name: ["=", "__none__"] }
+        }));
+    }
+
+    // ✅ calling the function to apply the filter
+    apply_parent_query_filter(frm);
+},
+validate: function(frm) {
+    //If "Use Parent Query" checkbox ticked & "Parent Query" is empty --> then show error 
+    if (frm.doc.use_past_query && !frm.doc.parent_query) {
+        //Then throw error message with form still editable
+        frappe.throw(__("Parent Query is mandatory when Use Parent Query is checked"));
+    }
+}   
+
 });
