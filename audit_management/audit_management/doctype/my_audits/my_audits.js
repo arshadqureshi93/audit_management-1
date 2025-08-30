@@ -1864,4 +1864,22 @@ frappe.ui.form.on("My Audits", {
       });
     };
   },
+   use_past_query: function (frm) {
+        // reset parent_query jab checkbox toggle ho
+        frm.set_value("parent_query", "");
+
+        if (frm.doc.use_past_query) {
+            // agar checked hai → filter apply karo
+            frm.set_query("parent_query", () => {
+                return {
+                    filters: frm.doc.emp_branch ? { emp_branch: frm.doc.emp_branch } : { name: "" }
+                };
+            });
+        } else {
+            // agar unchecked hai → filter hata do
+            frm.set_query("parent_query", () => {
+                return { filters: { name: "" } };
+            });
+        }
+    }
 });
