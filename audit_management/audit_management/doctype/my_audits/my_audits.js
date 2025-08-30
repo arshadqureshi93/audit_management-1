@@ -258,6 +258,9 @@ frappe.ui.form.on("My Audits", {
       frappe.validated = false;
       return;
     }
+    if (frm.doc.use_past_query && !frm.doc.parent_query) {
+            frappe.throw(__("Parent Query is mandatory when Use Parent Query is checked"));
+        }
   },
   // Function to call the Python method and set intro HTML
   call_html_intro: function (frm) {
@@ -1866,7 +1869,7 @@ frappe.ui.form.on("My Audits", {
   },
    use_past_query: function (frm) {
         // reset parent_query jab checkbox toggle ho
-        frm.set_value("parent_query", "");
+      
 
         if (frm.doc.use_past_query) {
             // agar checked hai → filter apply karo
@@ -1881,5 +1884,12 @@ frappe.ui.form.on("My Audits", {
                 return { filters: { name: "" } };
             });
         }
+    },
+    emp_branch: function (frm) {
+        // jab emp_branch change ho → parent_query reset karo
+     if(!frm.doc.emp_branch && frm.doc.parent_query){
+        frm.set_value("parent_query", "");
+        frm.refresh_field("parent_query");
+      }
     }
 });
