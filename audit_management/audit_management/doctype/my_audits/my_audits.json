@@ -107,6 +107,26 @@
   "hr_user_id",
   "column_break_ejb1i",
   "hr_mail",
+  "chro_section",
+  "chro_name",
+  "column_break_sgky",
+  "chro_user_status",
+  "column_break_bnsy",
+  "chro_pending_time",
+  "column_break_hfav",
+  "chro_user_id",
+  "column_break_rcqg",
+  "chro_mail",
+  "cfo_section",
+  "cfo_name",
+  "column_break_sxlr",
+  "cfo_user_status",
+  "column_break_rdss",
+  "cfo_pending_time",
+  "column_break_nhsc",
+  "cfo_user_id",
+  "column_break_qesc",
+  "cfo_mail",
   "stage_7_coo_section",
   "coo_name",
   "column_break_dzolr",
@@ -174,6 +194,12 @@
   "hr_response_section",
   "hr_attach_box",
   "hr_response_box",
+  "chro_response_section",
+  "chro_attach_box",
+  "chro_response_box",
+  "cfo_response_section",
+  "cfo_attach_box",
+  "cfo_response_box",
   "coo_response_section",
   "coo_attach_box",
   "coo_response_box",
@@ -380,7 +406,7 @@
    "fieldname": "query_status",
    "fieldtype": "Select",
    "label": "Query Status",
-   "options": "\nPending From BM\nResponse From BM\nPending From DH & COM\nResponse From DH\nResponse From COM\nResponse From DH & COM\nPending From RM & ROM\nResponse From RM\nResponse From ROM\nResponse From RM & ROM\nPending From ZM & ZOM\nResponse From ZM\nResponse From ZOM\nResponse From ZM & ZOM\nPending From GM\nResponse From GM\nPending From HR\nResponse From HR\nPending From COO\nResponse From COO\nPending From CEO\nResponse From CEO"
+   "options": "\nPending From BM\nResponse From BM\nPending From DH & COM\nResponse From DH\nResponse From COM\nResponse From DH & COM\nPending From RM & ROM\nResponse From RM\nResponse From ROM\nResponse From RM & ROM\nPending From ZM & ZOM\nResponse From ZM\nResponse From ZOM\nResponse From ZM & ZOM\nPending From GM\nResponse From GM\nPending From HR\nResponse From HR\nPending From CHRO\nResponse From CHRO\nPending From CFO\nResponse From CFO\nPending From COO\nResponse From COO\nPending From CEO\nResponse From CEO"
   },
   {
    "fieldname": "column_break_zjlzx",
@@ -1103,11 +1129,147 @@
    "fieldtype": "Select",
    "label": "send mail to all ?",
    "options": "\nNo\nYes"
+  },
+  {
+   "fetch_from": "emp_branch.chro_name",
+   "fieldname": "chro_name",
+   "fieldtype": "Data",
+   "label": "CHRO Name"
+  },
+  {
+   "fieldname": "column_break_sgky",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "chro_user_status",
+   "fieldtype": "Select",
+   "label": "CHRO User Status",
+   "options": "\nPending\nNo Response\nResponded\nSkipped"
+  },
+  {
+   "fieldname": "column_break_bnsy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "chro_pending_time",
+   "fieldtype": "Data",
+   "label": "CHRO Pending Time"
+  },
+  {
+   "fieldname": "column_break_hfav",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "emp_branch.chro_user_id",
+   "fieldname": "chro_user_id",
+   "fieldtype": "Data",
+   "label": "CHRO User ID"
+  },
+  {
+   "fieldname": "column_break_rcqg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "emp_branch.chro_mail",
+   "fieldname": "chro_mail",
+   "fieldtype": "Data",
+   "label": "CHRO Mail"
+  },
+  {
+   "fetch_from": "emp_branch.cfo_name",
+   "fieldname": "cfo_name",
+   "fieldtype": "Data",
+   "label": "CFO Name"
+  },
+  {
+   "fieldname": "column_break_sxlr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cfo_user_status",
+   "fieldtype": "Select",
+   "label": "CFO User Status",
+   "options": "\nPending\nNo Response\nResponded\nSkipped"
+  },
+  {
+   "fieldname": "column_break_rdss",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cfo_pending_time",
+   "fieldtype": "Data",
+   "label": "CFO Pending Time"
+  },
+  {
+   "fieldname": "column_break_nhsc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "emp_branch.cfo_user_id",
+   "fieldname": "cfo_user_id",
+   "fieldtype": "Data",
+   "label": "CFO User ID"
+  },
+  {
+   "fieldname": "column_break_qesc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "emp_branch.cfo_mail",
+   "fieldname": "cfo_mail",
+   "fieldtype": "Data",
+   "label": "CFO Mail"
+  },
+  {
+   "fieldname": "chro_section",
+   "fieldtype": "Section Break",
+   "label": "CHRO"
+  },
+  {
+   "fieldname": "cfo_section",
+   "fieldtype": "Section Break",
+   "label": "CFO"
+  },
+  {
+   "fieldname": "chro_response_section",
+   "fieldtype": "Section Break",
+   "label": "<b>CHRO Response: </b>"
+  },
+  {
+   "depends_on": "eval:doc.chro_response_box != null || frappe.session.user==doc.chro_user_id && doc.status==\"Pending\" && (doc.chro_user_status==\"Pending\" || doc.chro_user_status===\"No Response\")",
+   "fieldname": "chro_response_box",
+   "fieldtype": "Small Text",
+   "label": "CHRO response box"
+  },
+  {
+   "depends_on": "eval:frappe.session.user==doc.chro_user_id && (doc.chro_user_status===\"Pending\" || doc.chro_user_status===\"Responded\" || doc.chro_user_status===\"No Response\") || (frappe.session.user!==doc.chro_user_id && doc.chro_attach_box != null )",
+   "fieldname": "chro_attach_box",
+   "fieldtype": "Attach",
+   "label": "CHRO attachment",
+   "read_only_depends_on": "eval:frappe.session.user!==doc.chro_user_id && doc.chro_attach_box != null && doc.chro_user_status===\"Responded\""
+  },
+  {
+   "fieldname": "cfo_response_section",
+   "fieldtype": "Section Break",
+   "label": "<b>CFO Response: </b>"
+  },
+  {
+   "depends_on": "eval:frappe.session.user==doc.cfo_user_id && (doc.cfo_user_status===\"Pending\" || doc.cfo_user_status===\"Responded\" || doc.cfo_user_status===\"No Response\") || (frappe.session.user!==doc.cfo_user_id && doc.cfo_attach_box != null )",
+   "fieldname": "cfo_attach_box",
+   "fieldtype": "Attach",
+   "label": "CFO attachment",
+   "read_only_depends_on": "eval:frappe.session.user!==doc.cfo_user_id && doc.cfo_attach_box != null && doc.cfo_user_status===\"Responded\""
+  },
+  {
+   "depends_on": "eval:doc.cfo_response_box != null || frappe.session.user==doc.cfo_user_id && doc.status==\"Pending\" && (doc.cfo_user_status==\"Pending\" || doc.cfo_user_status===\"No Response\")",
+   "fieldname": "cfo_response_box",
+   "fieldtype": "Small Text",
+   "label": "CFO Response Box"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-03 11:11:55.667872",
+ "modified": "2025-09-11 10:49:52.329618",
  "modified_by": "Administrator",
  "module": "Audit Management",
  "name": "My Audits",
@@ -1164,7 +1326,6 @@
    "write": 1
   }
  ],
- "quick_entry": 1,
  "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
