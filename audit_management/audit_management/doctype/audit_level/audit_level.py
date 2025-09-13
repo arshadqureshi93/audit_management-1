@@ -17,8 +17,9 @@ class AuditLevel(Document):
                 filters={"emp_branch": self.emp_branch},  # Use appropriate filter for linking
                 fields=["name", "bm_user_status", "dh_user_status", "com_user_status",
                         "rm_user_status", "rom_user_status", "zm_user_status", 
-                        "zom_user_status", "gm_user_status","hr_user_status","coo_user_status", 
-                        "ceo_user_status"]
+                        "zom_user_status", "gm_user_status","hr_user_status", 
+                        "chro_user_status","cfo_user_status",
+                        "coo_user_status","ceo_user_status"]
             )
 
             # Handle each stage individually
@@ -83,7 +84,18 @@ class AuditLevel(Document):
                     frappe.db.set_value("My Audits", record.name, "hr_name", self.stage_6_hr_name, update_modified=False)
                     frappe.db.set_value("My Audits", record.name, "hr_mail", self.stage_6_hr_mail, update_modified=False)
 
+                # New Level: CHRO
+                if self.chro_emp_id and (record.chro_user_status == "" or record.chro_user_status == "Pending"):
+                    frappe.db.set_value("My Audits", record.name, "chro_user_id", self.chro_user_id, update_modified=False)
+                    frappe.db.set_value("My Audits", record.name, "chro_name", self.chro_name, update_modified=False)
+                    frappe.db.set_value("My Audits", record.name, "chro_mail", self.chro_mail, update_modified=False)
 
+                # New Level: CFO
+                if self.cfo_emp_id and (record.cfo_user_status == "" or record.cfo_user_status == "Pending"):
+                    frappe.db.set_value("My Audits", record.name, "cfo_user_id", self.cfo_user_id, update_modified=False)
+                    frappe.db.set_value("My Audits", record.name, "cfo_name", self.cfo_name, update_modified=False)
+                    frappe.db.set_value("My Audits", record.name, "cfo_mail", self.cfo_mail, update_modified=False)
+               
                 # Stage 7: COO
                 if self.stage_7_coo_emp_id and (record.coo_user_status == "" or record.coo_user_status == "Pending"):
                     frappe.db.set_value("My Audits", record.name, "coo_user_id", self.stage_7_coo_user_id, update_modified=False)

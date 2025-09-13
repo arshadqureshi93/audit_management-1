@@ -81,6 +81,22 @@
   "stage_6_hr_name",
   "column_break_w7x50",
   "stage_6_hr_mail",
+  "chro_section",
+  "chro_emp_id",
+  "column_break_asxt",
+  "chro_user_id",
+  "column_break_qgcv",
+  "chro_name",
+  "column_break_qbdk",
+  "chro_mail",
+  "new_level_cfo_section",
+  "cfo_emp_id",
+  "column_break_gkwj",
+  "cfo_user_id",
+  "column_break_flwz",
+  "cfo_name",
+  "column_break_dmot",
+  "cfo_mail",
   "stage_7_coo_section",
   "stage_7_coo_emp_id",
   "column_break_wd2ri",
@@ -580,11 +596,95 @@
    "fieldname": "stage_1_bm_section",
    "fieldtype": "Section Break",
    "label": "Stage 1 (BM)"
+  },
+  {
+   "fieldname": "column_break_asxt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_qgcv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_qbdk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "new_level_cfo_section",
+   "fieldtype": "Section Break",
+   "label": "CFO"
+  },
+  {
+   "fieldname": "column_break_gkwj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_flwz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_dmot",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "chro_section",
+   "fieldtype": "Section Break",
+   "label": "CHRO"
+  },
+  {
+   "fieldname": "chro_emp_id",
+   "fieldtype": "Link",
+   "ignore_user_permissions": 1,
+   "label": "<b>CHRO Employee ID</b>",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "chro_emp_id.user_id",
+   "fieldname": "chro_user_id",
+   "fieldtype": "Data",
+   "label": "CHRO User ID"
+  },
+  {
+   "fetch_from": "chro_emp_id.employee_name",
+   "fieldname": "chro_name",
+   "fieldtype": "Data",
+   "label": "CHRO Name"
+  },
+  {
+   "fetch_from": "chro_emp_id.company_email",
+   "fieldname": "chro_mail",
+   "fieldtype": "Data",
+   "label": "CHRO Mail"
+  },
+  {
+   "fieldname": "cfo_emp_id",
+   "fieldtype": "Link",
+   "ignore_user_permissions": 1,
+   "label": "<b>CFO Employee ID<b></b></b>",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "cfo_emp_id.user_id",
+   "fieldname": "cfo_user_id",
+   "fieldtype": "Data",
+   "label": "CFO User ID"
+  },
+  {
+   "fetch_from": "cfo_emp_id.employee_name",
+   "fieldname": "cfo_name",
+   "fieldtype": "Data",
+   "label": "CFO Name"
+  },
+  {
+   "fetch_from": "cfo_emp_id.company_email",
+   "fieldname": "cfo_mail",
+   "fieldtype": "Data",
+   "label": "CFO Mail"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-03 11:16:20.692305",
+ "modified": "2025-09-09 17:33:43.920189",
  "modified_by": "Administrator",
  "module": "Audit Management",
  "name": "Audit Level",

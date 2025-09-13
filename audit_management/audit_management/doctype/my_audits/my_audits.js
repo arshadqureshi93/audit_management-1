@@ -2,10 +2,14 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("My Audits", {
+
+  // onload function to check read only conditions and set background colors
   onload: function (frm) {
     frm.trigger("check_field_read_only");
     frm.trigger("set_background_colors");
   },
+
+  // Response Box And Attach Box Read Only Conditions
   check_field_read_only: function (frm) {
     if (
       (!frappe.user.has_role("Audit Manager") ||
@@ -34,6 +38,7 @@ frappe.ui.form.on("My Audits", {
     ) {
       frm.disable_form();
     }
+    // making read_only to BM response box
     if (
       frm.doc.query_status !== "Pending From BM" &&
       frm.doc.bm_user_status === "Responded"
@@ -117,6 +122,26 @@ frappe.ui.form.on("My Audits", {
       frm.refresh_field("hr_attach_box");
     }
 
+    // making read_only to CHRO response box
+    if (frm.doc.query_status !== "Pending From CHRO") {
+      if (frm.doc.chro_user_status === "Responded") {
+        frm.set_df_property("chro_response_box", "read_only", 1);
+        frm.set_df_property("chro_attach_box", "read_only", true);
+      }
+      frm.refresh_field("chro_response_box");
+      frm.refresh_field("chro_attach_box");
+    }
+
+    // making read_only to CFO response box
+    if (frm.doc.query_status !== "Pending From CFO") {
+      if (frm.doc.cfo_user_status === "Responded") {
+        frm.set_df_property("cfo_response_box", "read_only", 1);
+        frm.set_df_property("cfo_attach_box", "read_only", true);
+      }
+      frm.refresh_field("cfo_response_box");
+      frm.refresh_field("cfo_attach_box");
+    }
+
     // making read_only to CEO response box
     if (frm.doc.query_status !== "Pending From CEO") {
       if (frm.doc.ceo_user_status === "Responded") {
@@ -127,6 +152,7 @@ frappe.ui.form.on("My Audits", {
       frm.refresh_field("ceo_attach_box");
     }
   },
+  // Audit Query Subject Box to uppercase
   audit_query_subject_box: function (frm) {
     // Check if audit_query_box has a value before converting to uppercase
     if (frm.doc.audit_query_subject_box) {
@@ -137,6 +163,7 @@ frappe.ui.form.on("My Audits", {
       frm.refresh_field("audit_query_subject_box");
     }
   },
+  // Audit Query Box to uppercase
   audit_query_box: function (frm) {
     // Check if audit_query_box has a value before converting to uppercase
     if (frm.doc.audit_query_box) {
@@ -144,6 +171,8 @@ frappe.ui.form.on("My Audits", {
       frm.refresh_field("audit_query_box");
     }
   },
+
+  // BM response box to uppercase
   bm_response_box: function (frm) {
     // Check if bm_response_box has a value before converting to uppercase
     if (frm.doc.bm_response_box) {
@@ -151,6 +180,7 @@ frappe.ui.form.on("My Audits", {
       frm.refresh_field("bm_response_box");
     }
   },
+  // DH response box to uppercase
   dh_response_box: function (frm) {
     // Check if dh_response_box has a value before converting to uppercase
     if (frm.doc.dh_response_box) {
@@ -158,6 +188,7 @@ frappe.ui.form.on("My Audits", {
       frm.refresh_field("dh_response_box");
     }
   },
+  // COM response box to uppercase
   com_response_box: function (frm) {
     // Check if com_response_box has a value before converting to uppercase
     if (frm.doc.com_response_box) {
@@ -165,6 +196,7 @@ frappe.ui.form.on("My Audits", {
       frm.refresh_field("com_response_box");
     }
   },
+  // RM response box to uppercase
   rm_response_box: function (frm) {
     // Check if com_response_box has a value before converting to uppercase
     if (frm.doc.rm_response_box) {
@@ -172,6 +204,7 @@ frappe.ui.form.on("My Audits", {
       frm.refresh_field("rm_response_box");
     }
   },
+  // ROM response box to uppercase
   rom_response_box: function (frm) {
     // Check if com_response_box has a value before converting to uppercase
     if (frm.doc.rom_response_box) {
@@ -179,6 +212,7 @@ frappe.ui.form.on("My Audits", {
       frm.refresh_field("rom_response_box");
     }
   },
+  // ZM response box to uppercase
   zm_response_box: function (frm) {
     // Check if com_response_box has a value before converting to uppercase
     if (frm.doc.zm_response_box) {
@@ -186,6 +220,7 @@ frappe.ui.form.on("My Audits", {
       frm.refresh_field("zm_response_box");
     }
   },
+  // ZOM response box to uppercase
   zom_response_box: function (frm) {
     // Check if com_response_box has a value before converting to uppercase
     if (frm.doc.zom_response_box) {
@@ -193,6 +228,7 @@ frappe.ui.form.on("My Audits", {
       frm.refresh_field("zom_response_box");
     }
   },
+  // GM response box to uppercase
   gm_response_box: function (frm) {
     // Check if com_response_box has a value before converting to uppercase
     if (frm.doc.gm_response_box) {
@@ -200,13 +236,31 @@ frappe.ui.form.on("My Audits", {
       frm.refresh_field("gm_response_box");
     }
   },
+  // HR response box to uppercase
   hr_response_box: function (frm) {
     // Check if com_response_box has a value before converting to uppercase
-    if (frm.doc.gm_response_box) {
+    if (frm.doc.hr_response_box) {
       frm.set_value("hr_response_box", frm.doc.hr_response_box.toUpperCase());
       frm.refresh_field("hr_response_box");
     }
   },
+  // CHRO response box to uppercase
+  chro_response_box: function (frm) {
+    // Check if chro_response_box has a value before converting to uppercase
+    if (frm.doc.chro_response_box) {
+      frm.set_value("chro_response_box", frm.doc.chro_response_box.toUpperCase());
+      frm.refresh_field("chro_response_box");
+    }
+  },
+  // CFO response box to uppercase
+  cfo_response_box: function (frm) {
+    // Check if cfo_response_box has a value before converting to uppercase
+    if (frm.doc.cfo_response_box) {
+      frm.set_value("cfo_response_box", frm.doc.cfo_response_box.toUpperCase());
+      frm.refresh_field("cfo_response_box");
+    }
+  },
+  // COO response box to uppercase
   coo_response_box: function (frm) {
     // Check if com_response_box has a value before converting to uppercase
     if (frm.doc.coo_response_box) {
@@ -214,6 +268,7 @@ frappe.ui.form.on("My Audits", {
       frm.refresh_field("coo_response_box");
     }
   },
+  // CEO response box to uppercase
   ceo_response_box: function (frm) {
     // Check if com_response_box has a value before converting to uppercase
     if (frm.doc.ceo_response_box) {
@@ -221,6 +276,7 @@ frappe.ui.form.on("My Audits", {
       frm.refresh_field("ceo_response_box");
     }
   },
+  // Before save function to set default status and validate fields
   before_save: function (frm) {
     // If the status is blank, set it to "Draft" before saving
     if (!frm.doc.status) {
@@ -391,6 +447,12 @@ frappe.ui.form.on("My Audits", {
           (frappe.session.user == frm.doc.hr_user_id &&
             (frm.doc.hr_user_status === "Pending" ||
               frm.doc.hr_user_status === "No Response")) ||
+          (frappe.session.user == frm.doc.chro_user_id &&
+            (frm.doc.chro_user_status === "Pending" ||
+              frm.doc.chro_user_status === "No Response")) ||
+          (frappe.session.user == frm.doc.cfo_user_id &&
+            (frm.doc.cfo_user_status === "Pending" ||
+              frm.doc.cfo_user_status === "No Response")) ||              
           (frappe.session.user == frm.doc.coo_user_id &&
             (frm.doc.coo_user_status === "Pending" ||
               frm.doc.coo_user_status === "No Response")) ||
@@ -500,6 +562,20 @@ frappe.ui.form.on("My Audits", {
           frm.trigger("show_sendToHr_withClose_btn");
         }
         if (
+          frm.doc.chro_user_status === "" &&
+          (frm.doc.query_type !== "Audit Report Compliance" ||
+            frm.doc.bm_user_status === "Responded")
+        ) {
+          frm.trigger("show_sendToChro_withClose_btn");
+        }
+        if (
+          frm.doc.cfo_user_status === "" &&
+          (frm.doc.query_type !== "Audit Report Compliance" ||
+            frm.doc.bm_user_status === "Responded")
+        ) {
+          frm.trigger("show_sendToCfo_withClose_btn");
+        }
+        if (
           frm.doc.coo_user_status === "" &&
           (frm.doc.query_type !== "Audit Report Compliance" ||
             frm.doc.bm_user_status === "Responded")
@@ -522,6 +598,9 @@ frappe.ui.form.on("My Audits", {
             !frm.doc.zm_user_status ||
             !frm.doc.zom_user_status ||
             !frm.doc.gm_user_status ||
+            !frm.doc.hr_user_status ||
+            !frm.doc.chro_user_status ||
+            !frm.doc.cfo_user_status ||
             !frm.doc.coo_user_status ||
             !frm.doc.ceo_user_status) &&
           frm.doc.query_type !== "Audit Report Compliance"
@@ -537,7 +616,7 @@ frappe.ui.form.on("My Audits", {
       }
     }
   },
-
+  // Fetch query maker data
   fetch_query_maker: function (frm) {
     console.log("Fetching query maker data...");
 
@@ -586,6 +665,8 @@ frappe.ui.form.on("My Audits", {
       });
     }
   },
+
+  // BM ko query send krne k liye button
   show_sendToBmWithClose_btn: function (frm) {
     console.log("audit work kar raha hai");
     if (
@@ -658,6 +739,7 @@ frappe.ui.form.on("My Audits", {
       frm.trigger("close_query");
     }
   },
+  // DH&COM ko query send krne k liye button
   show_sendToDhComWithClose_btn: function (frm) {
     // Add the first button - "Send Response"
     if (
@@ -762,6 +844,7 @@ frappe.ui.form.on("My Audits", {
       }
     }
   },
+  // RM&ROM ko query send krne k liye button
   show_sendToRmRomWithClose_btn: function (frm) {
     // Add the first button - "Send Response"
     if (
@@ -869,6 +952,7 @@ frappe.ui.form.on("My Audits", {
       }
     }
   },
+  // ZM&ZOM ko query send krne k liye button
   show_sendToZmZomWithClose_btn: function (frm) {
     // Add the first button - "Send Response"
     if (
@@ -975,6 +1059,7 @@ frappe.ui.form.on("My Audits", {
       }
     }
   },
+  // GM ko query send krne k liye button
   show_sendToGm_withClose_btn: function (frm) {
     if (
       (frappe.user.has_role("Audit Manager") ||
@@ -1065,6 +1150,7 @@ frappe.ui.form.on("My Audits", {
       }
     }
   },
+  // HR ko query send krne k liye button
   show_sendToHr_withClose_btn: function (frm) {
     if (
       (frappe.user.has_role("Audit Manager") ||
@@ -1155,6 +1241,189 @@ frappe.ui.form.on("My Audits", {
       }
     }
   },
+  // CHRO ko query send krne k liye button
+  show_sendToChro_withClose_btn: function (frm) {
+    if (
+      (frappe.user.has_role("Audit Manager") ||
+        frappe.user.has_role("Audit Member")) &&
+      (frm.doc.status === "Draft" || frm.doc.status === "Pending")
+    ) {
+      // Add the "Send to CHRO" button
+      if (frm.doc.chro_user_status === "") {
+        frm
+          .add_custom_button(
+            __("Send to CHRO"),
+            function () {
+              // Fallback if emp_branch is not available
+              let emp_branch = frm.doc.emp_branch || "the employee's branch";
+
+              frappe.confirm(
+                `<i><b>Do you want to send the query to the New Level (CHRO of ${emp_branch}) i.e "${frm.doc.chro_name}"?</b></i>`,
+                () => {
+                  // Send the document to CHRO
+                  frappe
+                    .call({
+                      method: "frappe.share.add",
+                      freeze: true,
+                      freeze_message: "Internet Not Stable, Please Wait...",
+                      args: {
+                        doctype: frm.doctype,
+                        name: frm.docname,
+                        user: frm.doc.chro_user_id, // Send to GM user
+                        read: 1,
+                        write: 1,
+                        submit: 0,
+                        share: 1,
+                        notify: 1,
+                        send_email: 0,
+                      },
+                    })
+                    .then(() => {
+                      // Success message
+                      console.log("Sent to CHRO");
+                      frappe.show_alert({
+                        message:
+                          "Your Approval Request Sent to CHRO Successfully",
+                        indicator: "green",
+                      });
+                      frm.set_value("query_status", "Pending From CHRO");
+                      frm.set_value("chro_user_status", "Pending");
+                      frm.set_value("status", "Pending");
+                      frm.refresh_field("status");
+                      frm.refresh_field("query_status");
+                      frm.refresh_field("chro_user_status");
+
+                      // Call the common function to set pending time for GM
+                      frm.frappecalltopendingtimefunction(
+                        frm,
+                        frm.docname,
+                        "chro"
+                      );
+                      frm.save();
+                    })
+                    .catch(() => {
+                      // Handle failure
+                      frappe.msgprint(
+                        "An error occurred while sending the request to CHRO."
+                      );
+                    });
+                }
+              );
+            },
+            "Send to"
+          )
+          .css({
+            "background-color": "#28a745",
+            color: "#ffffff",
+            margin: "1px",
+          });
+        // Add styling to the button using its class
+        $('.btn.btn-default.ellipsis:contains("Send to")').css({
+          "background-color": "#28a745", // Custom green background color
+          color: "#ffffff", // White text color
+          margin: "1px",
+          width: "100px",
+        });
+      }
+
+      // Add the close_query button
+      if (frm.doc.status !== "Draft") {
+        frm.trigger("close_query");
+      }
+    }
+  },
+  // CFO ko query send krne k liye button
+  show_sendToCfo_withClose_btn: function (frm) {
+    if (
+      (frappe.user.has_role("Audit Manager") ||
+        frappe.user.has_role("Audit Member")) &&
+      (frm.doc.status === "Draft" || frm.doc.status === "Pending")
+    ) {
+      // Add the "Send to CFO" button
+      if (frm.doc.cfo_user_status === "") {
+        frm
+          .add_custom_button(
+            __("Send to CFO"),
+            function () {
+              // Fallback if emp_branch is not available
+              let emp_branch = frm.doc.emp_branch || "the employee's branch";
+
+              frappe.confirm(
+                `<i><b>Do you want to send the query to the New Level (CFO of ${emp_branch}) i.e "${frm.doc.cfo_name}"?</b></i>`,
+                () => {
+                  // Send the document to CFO
+                  frappe
+                    .call({
+                      method: "frappe.share.add",
+                      freeze: true,
+                      freeze_message: "Internet Not Stable, Please Wait...",
+                      args: {
+                        doctype: frm.doctype,
+                        name: frm.docname,
+                        user: frm.doc.cfo_user_id, // Send to GM user
+                        read: 1,
+                        write: 1,
+                        submit: 0,
+                        share: 1,
+                        notify: 1,
+                        send_email: 0,
+                      },
+                    })
+                    .then(() => {
+                      // Success message
+                      console.log("Sent to CFO");
+                      frappe.show_alert({
+                        message:
+                          "Your Approval Request Sent to CFO Successfully",
+                        indicator: "green",
+                      });
+                      frm.set_value("query_status", "Pending From CFO");
+                      frm.set_value("cfo_user_status", "Pending");
+                      frm.set_value("status", "Pending");
+                      frm.refresh_field("status");
+                      frm.refresh_field("query_status");
+                      frm.refresh_field("cfo_user_status");
+
+                      // Call the common function to set pending time for GM
+                      frm.frappecalltopendingtimefunction(
+                        frm,
+                        frm.docname,
+                        "cfo"
+                      );
+                      frm.save();
+                    })
+                    .catch(() => {
+                      // Handle failure
+                      frappe.msgprint(
+                        "An error occurred while sending the request to CFO."
+                      );
+                    });
+                }
+              );
+            },
+            "Send to"
+          )
+          .css({
+            "background-color": "#28a745",
+            color: "#ffffff",
+            margin: "1px",
+          });
+        // Add styling to the button using its class
+        $('.btn.btn-default.ellipsis:contains("Send to")').css({
+          "background-color": "#28a745", // Custom green background color
+          color: "#ffffff", // White text color
+          margin: "1px",
+          width: "100px",
+        });
+      }
+
+      // Add the close_query button
+      if (frm.doc.status !== "Draft") {
+        frm.trigger("close_query");
+      }
+    }
+  },
+  // COO ko query send krne k liye button
   show_sendToCOO_withClose_btn: function (frm) {
     if (
       (frappe.user.has_role("Audit Manager") ||
@@ -1246,6 +1515,7 @@ frappe.ui.form.on("My Audits", {
       }
     }
   },
+  // CEO ko query send krne k liye button
   show_sendToCEO_withClose_btn: function (frm) {
     if (
       (frappe.user.has_role("Audit Manager") ||
@@ -1335,6 +1605,7 @@ frappe.ui.form.on("My Audits", {
       }
     }
   },
+  // All levels ko query send krne k liye button
   show_sendToAll_withClose_btn: function (frm) {
     if (
       (frappe.user.has_role("Audit Manager") ||
@@ -1351,6 +1622,8 @@ frappe.ui.form.on("My Audits", {
         { userId: frm.doc.zom_user_id, statusField: "zom_user_status" },
         { userId: frm.doc.gm_user_id, statusField: "gm_user_status" },
         { userId: frm.doc.hr_user_id, statusField: "hr_user_status" },
+        { userId: frm.doc.chro_user_id, statusField: "chro_user_status" },
+        { userId: frm.doc.cfo_user_id, statusField: "cfo_user_status" },
         { userId: frm.doc.coo_user_id, statusField: "coo_user_status" },
         { userId: frm.doc.ceo_user_id, statusField: "ceo_user_status" },
       ];
@@ -1419,6 +1692,8 @@ frappe.ui.form.on("My Audits", {
                       zom_timestamp,
                       gm_timestamp,
                       hr_timestamp,
+                      chro_timestamp,
+                      cfo_timestamp,          
                       coo_timestamp,
                       ceo_timestamp,
                     } = response.message;
@@ -1434,6 +1709,8 @@ frappe.ui.form.on("My Audits", {
                       zom_pending_time: zom_timestamp,
                       gm_pending_time: gm_timestamp,
                       hr_pending_time: hr_timestamp,
+                      chro_pending_time: chro_timestamp,
+                      cfo_pending_time: cfo_timestamp,
                       coo_pending_time: coo_timestamp,
                       ceo_pending_time: ceo_timestamp,
                     };
@@ -1487,7 +1764,7 @@ frappe.ui.form.on("My Audits", {
       }
     }
   },
-
+  // Response send krne k liye button
   show_sendResponse_btn: function (frm) {
     frm
       .add_custom_button(__("Send Response"), function () {
@@ -1511,6 +1788,10 @@ frappe.ui.form.on("My Audits", {
             !frm.doc.gm_response_box) ||
           (frappe.session.user == frm.doc.hr_user_id &&
             !frm.doc.hr_response_box) ||
+          (frappe.session.user == frm.doc.chro_user_id &&
+            !frm.doc.chro_response_box) ||
+          (frappe.session.user == frm.doc.cfo_user_id &&
+            !frm.doc.cfo_response_box) ||    
           (frappe.session.user == frm.doc.coo_user_id &&
             !frm.doc.coo_response_box) ||
           (frappe.session.user == frm.doc.ceo_user_id &&
@@ -1691,6 +1972,24 @@ frappe.ui.form.on("My Audits", {
               frm.set_value("hr_user_status", "Responded");
             }
 
+            // for chro
+            if (
+              frm.doc.chro_user_status === "Pending" ||
+              frm.doc.chro_user_status === "No Response"
+            ) {
+              frm.set_value("query_status", "Response From CHRO");
+              frm.set_value("chro_user_status", "Responded");
+            }
+
+            // for cfo
+            if (
+              frm.doc.cfo_user_status === "Pending" ||
+              frm.doc.cfo_user_status === "No Response"
+            ) {
+              frm.set_value("query_status", "Response From CFO");
+              frm.set_value("cfo_user_status", "Responded");
+            }
+
             // for coo
             if (
               frm.doc.coo_user_status === "Pending" ||
@@ -1724,6 +2023,7 @@ frappe.ui.form.on("My Audits", {
         color: "#ffffff",
       });
   },
+  // Query close krne k liye button
   close_query: function (frm) {
     if (frm.doc.status !== "Close") {
       frm
@@ -1773,6 +2073,7 @@ frappe.ui.form.on("My Audits", {
         });
     }
   },
+  // Common function to call server-side method for pending time updates
   onload: function (frm) {
     // Define the function inside the onload event
     frm.frappecalltopendingtimefunction = function (frm, record, stage) {
@@ -1795,6 +2096,8 @@ frappe.ui.form.on("My Audits", {
               zom_timestamp,
               gm_timestamp,
               hr_timestamp,
+              chro_timestamp,
+              cfo_timestamp,
               coo_timestamp,
               ceo_timestamp,
               message,
@@ -1846,6 +2149,18 @@ frappe.ui.form.on("My Audits", {
             if (hr_timestamp) {
               frm.set_value("hr_pending_time", hr_timestamp);
               console.log("[DEBUG] hr_pending_time set:", hr_timestamp); // Debug message
+            }
+
+            // Set the chro_pending_time field
+            if (chro_timestamp) {
+              frm.set_value("chro_pending_time", chro_timestamp);
+              console.log("[DEBUG] chro_pending_time set:", chro_timestamp); // Debug message
+            }
+
+            // Set the cfo_pending_time field
+            if (cfo_timestamp) {
+              frm.set_value("cfo_pending_time", cfo_timestamp);
+              console.log("[DEBUG] cfo_pending_time set:", cfo_timestamp); // Debug message
             }
 
             // Set the coo_pending_time field

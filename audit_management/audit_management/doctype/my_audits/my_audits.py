@@ -33,6 +33,10 @@ def get_status_tracker_html(docname):
         "gm_name": audit_doc.gm_name,
         "hr_user_id": audit_doc.hr_user_status,
         "hr_name": audit_doc.hr_name,
+        "chro_user_id": audit_doc.chro_user_status,
+        "chro_name": audit_doc.chro_name,
+        "cfo_user_id": audit_doc.cfo_user_status,
+        "cfo_name": audit_doc.cfo_name,
         "coo_user_id": audit_doc.coo_user_status,
         "coo_name": audit_doc.coo_name,
         "ceo_user_id": audit_doc.ceo_user_status,
@@ -204,12 +208,48 @@ def get_status_tracker_html(docname):
         hr_title = f"Stage 5 : No Response from HR within TAT - {hr_name}"
     elif hr_status == "Skipped":
         hr_color = "#ffbe0b"
-        hr_title = f"Stage 5 : Skipped - No GM set for {branch_name}"
+        hr_title = f"Stage 5 : Skipped - No HM set for {branch_name}"
     else:
         hr_color = "green" if hr_status == "Responded" else "red"
         hr_title = f"Stage 5 : Response for HR - {hr_name}" if hr_color == "green" else f"Stage 5 : Pending From HR - {hr_name}"
 
     html_output += create_status_box("HR", hr_color, hr_title) + " <b>--></b> "
+
+    # CHRO color logic
+    chro_status = status_mapping["chro_user_id"]
+    chro_name = status_mapping["chro_name"]
+    if chro_status == "":
+        chro_color = "grey"
+        chro_title = f"Stage 5 : Not sent to CHRO - {chro_name}"
+    elif chro_status == "No Response":
+        chro_color = "#4b0a7d"
+        chro_title = f"Stage 5 : No Response from CHRO within TAT - {chro_name}"
+    elif chro_status == "Skipped":
+        chro_color = "#ffbe0b"
+        chro_title = f"Stage 5 : Skipped - No CHRO set for {branch_name}"
+    else:
+        chro_color = "green" if chro_status == "Responded" else "red"
+        chro_title = f"Stage 5 : Response for CHRO - {chro_name}" if chro_color == "green" else f"Stage 5 : Pending From CHRO - {chro_name}"
+
+    html_output += create_status_box("CHRO", chro_color, chro_title) + " <b>--></b> "
+
+# CFO color logic
+    cfo_status = status_mapping["cfo_user_id"]
+    cfo_name = status_mapping["cfo_name"]
+    if cfo_status == "":
+        cfo_color = "grey"
+        cfo_title = f"Stage 5 : Not sent to CFO - {cfo_name}"
+    elif cfo_status == "No Response":
+        cfo_color = "#4b0a7d"
+        cfo_title = f"Stage 5 : No Response from CFO within TAT - {cfo_name}"
+    elif cfo_status == "Skipped":
+        cfo_color = "#ffbe0b"
+        cfo_title = f"Stage 5 : Skipped - No CFO set for {branch_name}"
+    else:
+        cfo_color = "green" if cfo_status == "Responded" else "red"
+        cfo_title = f"Stage 5 : Response for CFO - {cfo_name}" if cfo_color == "green" else f"Stage 5 : Pending From CFO - {cfo_name}"
+
+    html_output += create_status_box("CFO", cfo_color, cfo_title) + " <b>--></b> "
 
     # COO color logic
     coo_status = status_mapping["coo_user_id"]
@@ -320,6 +360,20 @@ def send_to_specific_stage(record, stage):
             "message": f"hr_pending_time is set for record: {record}"
         }
 
+    elif stage == "chro":
+        current_time = now()  # Get the current timestamp
+        message = {
+            "chro_timestamp": current_time,
+            "message": f"chro_pending_time is set for record: {record}"
+        }
+
+    elif stage == "cfo":
+        current_time = now()  # Get the current timestamp
+        message = {
+            "cfo_timestamp": current_time,
+            "message": f"cfo_pending_time is set for record: {record}"
+        }   
+
     elif stage == "coo":
         current_time = now()  # Get the current timestamp
         message = {
@@ -347,8 +401,9 @@ def send_to_all(record):
             "com_timestamp": current_time,"rm_timestamp": current_time,
             "rom_timestamp": current_time, "zm_timestamp": current_time,
             "zom_timestamp": current_time,"gm_timestamp": current_time,
-            "hr_timestamp": current_time,"coo_timestamp": current_time,
-            "ceo_timestamp": current_time,
+            "hr_timestamp": current_time,
+            "chro_timestamp": current_time,"cfo_timestamp": current_time,
+            "coo_timestamp": current_time,"ceo_timestamp": current_time,
         }
     return message  # Return the message containing timestamps
 
@@ -399,6 +454,8 @@ def check_pending_tat():
             ["zom_user_status", "=", "Pending"],
             ["gm_user_status", "=", "Pending"],
             ["hr_user_status", "=", "Pending"],
+            ["chro_user_status", "=", "Pending"],
+            ["cfo_user_status", "=", "Pending"],
             ["coo_user_status", "=", "Pending"],
             ["ceo_user_status", "=", "Pending"],
         ],
@@ -414,7 +471,9 @@ def check_pending_tat():
         "rm_name", "rom_name",        
         "zm_name", "zom_name",        
         "gm_name",                   
-        "hr_name",                    
+        "hr_name",
+        "chro_name",
+        "cfo_name",                    
         "coo_name",                
         "ceo_name",
         "bm_user_status", "bm_pending_time", "bm_mail",
@@ -426,6 +485,8 @@ def check_pending_tat():
         "zom_user_status", "zom_pending_time", "zom_mail",
         "gm_user_status", "gm_pending_time", "gm_mail",
         "hr_user_status", "hr_pending_time", "hr_mail",
+        "chro_user_status", "chro_pending_time", "chro_mail",
+        "cfo_user_status", "cfo_pending_time", "cfo_mail",
         "coo_user_status", "coo_pending_time", "coo_mail",
         "ceo_user_status", "ceo_pending_time", "ceo_mail"
     ]
@@ -473,6 +534,18 @@ def check_pending_tat():
         {
             "current": ["hr_user_status", "hr_pending_time", "hr_mail"],
             "next": [
+                ["chro_user_status", "chro_pending_time", "chro_mail"]
+            ]
+        },
+        {
+            "current": ["chro_user_status", "chro_pending_time", "chro_mail"],
+            "next": [
+                ["cfo_user_status", "cfo_pending_time", "cfo_mail"]
+            ]
+        },
+        {
+            "current": ["cfo_user_status", "cfo_pending_time", "cfo_mail"],
+            "next": [
                 ["coo_user_status", "coo_pending_time", "coo_mail"]
             ]
         },
@@ -497,6 +570,8 @@ def check_pending_tat():
             "zom_user_status": f"Dear {record.zm_name} & {record.zom_name},<br />ZM & ZOM for {record.query_generated_by_branch},<br /><br />",
             "gm_user_status": f"Dear {record.gm_name},<br />GM for {record.query_generated_by_branch},<br /><br />",
             "hr_user_status": f"Dear {record.hr_name},<br />HR for {record.query_generated_by_branch},<br /><br />",
+            "chro_user_status": f"Dear {record.chro_name},<br />CHRO for {record.query_generated_by_branch},<br /><br />",
+            "cfo_user_status": f"Dear {record.cfo_name},<br />CFO for {record.query_generated_by_branch},<br /><br />",
             "coo_user_status": f"Dear {record.coo_name},<br />COO for {record.query_generated_by_branch},<br /><br />",
             "ceo_user_status": f"Dear {record.ceo_name},<br />CEO for {record.query_generated_by_branch},<br /><br />",
         }
@@ -611,12 +686,16 @@ def printing_all_records():
         ["zom_user_status", "=", "Pending"],
         ["gm_user_status", "=", "Pending"],
         ["hr_user_status", "=", "Pending"],
+        ["chro_user_status", "=", "Pending"],
+        ["cfo_user_status", "=", "Pending"],
         ["coo_user_status", "=", "Pending"],
         ["ceo_user_status", "=", "Pending"]
     ], fields=["name", "bm_user_status", "bm_pending_time", "dh_user_status", "dh_pending_time",
                "com_user_status", "com_pending_time", "rm_user_status", "rm_pending_time", 
                "rom_user_status", "rom_pending_time", "zm_user_status", "zm_pending_time",
                "zom_user_status", "zom_pending_time", "gm_user_status", "gm_pending_time",
+               "hr_user_status", "hr_pending_time", 
+               "chro_user_status", "chro_pending_time","cfo_user_status", "cfo_pending_time",
                "coo_user_status", "coo_pending_time", "ceo_user_status", "ceo_pending_time"])
 
     # Log and print the fetched records
@@ -637,6 +716,8 @@ def get_audit_counts(is_admin=None):
         counts["draft_count"] = frappe.db.count("My Audits", filters={"status": "Draft"})
         counts["pending_count"] = frappe.db.count("My Audits", filters={"status": "Pending"})
         counts["close_count"] = frappe.db.count("My Audits", filters={"status": "Close"})
+
+        # Add Pending counts
         counts["bm_pending_count"] = frappe.db.count("My Audits", filters={"bm_user_status": "Pending"})
         counts["dh_pending_count"] = frappe.db.count("My Audits", filters={"dh_user_status": "Pending"})
         counts["com_pending_count"] = frappe.db.count("My Audits", filters={"com_user_status": "Pending"})
@@ -646,8 +727,12 @@ def get_audit_counts(is_admin=None):
         counts["zom_pending_count"] = frappe.db.count("My Audits", filters={"zom_user_status": "Pending"})
         counts["gm_pending_count"] = frappe.db.count("My Audits", filters={"gm_user_status": "Pending"})
         counts["hr_pending_count"] = frappe.db.count("My Audits", filters={"hr_user_status": "Pending"})
+        counts["chro_pending_count"] = frappe.db.count("My Audits", filters={"chro_user_status": "Pending"})
+        counts["cfo_pending_count"] = frappe.db.count("My Audits", filters={"cfo_user_status": "Pending"})
         counts["coo_pending_count"] = frappe.db.count("My Audits", filters={"coo_user_status": "Pending"})
         counts["ceo_pending_count"] = frappe.db.count("My Audits", filters={"ceo_user_status": "Pending"})
+
+        # Add Response counts
         counts["bm_response_count"] = frappe.db.count("My Audits", filters={"bm_user_status": "Responded"})
         counts["dh_response_count"] = frappe.db.count("My Audits", filters={"dh_user_status": "Responded"})
         counts["com_response_count"] = frappe.db.count("My Audits", filters={"com_user_status": "Responded"})
@@ -657,6 +742,8 @@ def get_audit_counts(is_admin=None):
         counts["zom_response_count"] = frappe.db.count("My Audits", filters={"zom_user_status": "Responded"})
         counts["gm_response_count"] = frappe.db.count("My Audits", filters={"gm_user_status": "Responded"})
         counts["hr_response_count"] = frappe.db.count("My Audits", filters={"hr_user_status": "Responded"})
+        counts["chro_response_count"] = frappe.db.count("My Audits", filters={"chro_user_status": "Responded"})
+        counts["cfo_response_count"] = frappe.db.count("My Audits", filters={"cfo_user_status": "Responded"})
         counts["coo_response_count"] = frappe.db.count("My Audits", filters={"coo_user_status": "Responded"})
         counts["ceo_response_count"] = frappe.db.count("My Audits", filters={"ceo_user_status": "Responded"})
 
@@ -670,6 +757,8 @@ def get_audit_counts(is_admin=None):
         counts["zom_no_response_count"] = frappe.db.count("My Audits", filters={"zom_user_status": "No Response"})
         counts["gm_no_response_count"] = frappe.db.count("My Audits", filters={"gm_user_status": "No Response"})
         counts["hr_no_response_count"] = frappe.db.count("My Audits", filters={"hr_user_status": "No Response"})
+        counts["chro_no_response_count"] = frappe.db.count("My Audits", filters={"chro_user_status": "No Response"})
+        counts["cfo_no_response_count"] = frappe.db.count("My Audits", filters={"cfo_user_status": "No Response"})
         counts["coo_no_response_count"] = frappe.db.count("My Audits", filters={"coo_user_status": "No Response"})
         counts["ceo_no_response_count"] = frappe.db.count("My Audits", filters={"ceo_user_status": "No Response"})
 
@@ -679,6 +768,8 @@ def get_audit_counts(is_admin=None):
         counts["draft_count"] = frappe.db.count("My Audits", filters={"status": "Draft", "owner": frappe.session.user})
         counts["pending_count"] = frappe.db.count("My Audits", filters={"status": "Pending", "owner": frappe.session.user})
         counts["close_count"] = frappe.db.count("My Audits", filters={"status": "Close", "owner": frappe.session.user})
+        
+        # Add Pending counts for restricted access
         counts["bm_pending_count"] = frappe.db.count("My Audits", filters={"bm_user_status": "Pending", "owner": frappe.session.user})
         counts["dh_pending_count"] = frappe.db.count("My Audits", filters={"dh_user_status": "Pending", "owner": frappe.session.user})
         counts["com_pending_count"] = frappe.db.count("My Audits", filters={"com_user_status": "Pending", "owner": frappe.session.user})
@@ -688,8 +779,12 @@ def get_audit_counts(is_admin=None):
         counts["zom_pending_count"] = frappe.db.count("My Audits", filters={"zom_user_status": "Pending", "owner": frappe.session.user})
         counts["gm_pending_count"] = frappe.db.count("My Audits", filters={"gm_user_status": "Pending", "owner": frappe.session.user})
         counts["hr_pending_count"] = frappe.db.count("My Audits", filters={"hr_user_status": "Pending", "owner": frappe.session.user})
+        counts["chro_pending_count"] = frappe.db.count("My Audits", filters={"chro_user_status": "Pending", "owner": frappe.session.user})
+        counts["cfo_pending_count"] = frappe.db.count("My Audits", filters={"cfo_user_status": "Pending", "owner": frappe.session.user})
         counts["coo_pending_count"] = frappe.db.count("My Audits", filters={"coo_user_status": "Pending", "owner": frappe.session.user})
         counts["ceo_pending_count"] = frappe.db.count("My Audits", filters={"ceo_user_status": "Pending", "owner": frappe.session.user})
+        
+        # Add Response counts for restricted access
         counts["bm_response_count"] = frappe.db.count("My Audits", filters={"bm_user_status": "Responded", "owner": frappe.session.user})
         counts["dh_response_count"] = frappe.db.count("My Audits", filters={"dh_user_status": "Responded", "owner": frappe.session.user})
         counts["com_response_count"] = frappe.db.count("My Audits", filters={"com_user_status": "Responded", "owner": frappe.session.user})
@@ -699,6 +794,8 @@ def get_audit_counts(is_admin=None):
         counts["zom_response_count"] = frappe.db.count("My Audits", filters={"zom_user_status": "Responded", "owner": frappe.session.user})
         counts["gm_response_count"] = frappe.db.count("My Audits", filters={"gm_user_status": "Responded", "owner": frappe.session.user})
         counts["hr_response_count"] = frappe.db.count("My Audits", filters={"hr_user_status": "Responded", "owner": frappe.session.user})
+        counts["chro_response_count"] = frappe.db.count("My Audits", filters={"chro_user_status": "Responded", "owner": frappe.session.user})
+        counts["cfo_response_count"] = frappe.db.count("My Audits", filters={"cfo_user_status": "Responded", "owner": frappe.session.user})
         counts["coo_response_count"] = frappe.db.count("My Audits", filters={"coo_user_status": "Responded", "owner": frappe.session.user})
         counts["ceo_response_count"] = frappe.db.count("My Audits", filters={"ceo_user_status": "Responded", "owner": frappe.session.user})
            
@@ -712,6 +809,8 @@ def get_audit_counts(is_admin=None):
         counts["zom_no_response_count"] = frappe.db.count("My Audits", filters={"zom_user_status": "No Response", "owner": frappe.session.user})
         counts["gm_no_response_count"] = frappe.db.count("My Audits", filters={"gm_user_status": "No Response", "owner": frappe.session.user})
         counts["hr_no_response_count"] = frappe.db.count("My Audits", filters={"hr_user_status": "No Response", "owner": frappe.session.user})
+        counts["chro_no_response_count"] = frappe.db.count("My Audits", filters={"chro_user_status": "No Response", "owner": frappe.session.user})
+        counts["cfo_no_response_count"] = frappe.db.count("My Audits", filters={"cfo_user_status": "No Response", "owner": frappe.session.user})
         counts["coo_no_response_count"] = frappe.db.count("My Audits", filters={"coo_user_status": "No Response", "owner": frappe.session.user})
         counts["ceo_no_response_count"] = frappe.db.count("My Audits", filters={"ceo_user_status": "No Response", "owner": frappe.session.user})
 
@@ -735,14 +834,17 @@ def get_audit_level_for_user():
             ['stage_4_zom_user_id', '=', user],
             ['stage_5_gm_user_id', '=', user],
             ['stage_6_hr_user_id', '=', user],
+            ['chro_user_id', '=', user],
+            ['cfo_user_id', '=', user],
             ['stage_7_coo_user_id', '=', user],
             ['stage_8_ceo_user_id', '=', user]
         ],
         fields=[
             'name', 'stage_1_bm_user_id', 'stage_2_dh_user_id', 'stage_2_com_user_id',
             'stage_3_rm_user_id', 'stage_3_rom_user_id', 'stage_4_zm_user_id',
-            'stage_4_zom_user_id', 'stage_5_gm_user_id', 'stage_6_hr_user_id','stage_7_coo_user_id',
-            'stage_8_ceo_user_id'
+            'stage_4_zom_user_id', 'stage_5_gm_user_id', 'stage_6_hr_user_id',
+            'chro_user_id', 'cfo_user_id',
+            'stage_7_coo_user_id', 'stage_8_ceo_user_id'
         ]
     )
 
@@ -759,6 +861,8 @@ def get_audit_level_for_user():
             'stage_4_zom_user_id': "zom_user_status",
             'stage_5_gm_user_id': "gm_user_status",
             'stage_6_hr_user_id': "hr_user_status",
+            'chro_user_id': "chro_user_status",
+            'cfo_user_id': "cfo_user_status",
             'stage_7_coo_user_id': "coo_user_status", 
             'stage_8_ceo_user_id': "ceo_user_status"
         }
